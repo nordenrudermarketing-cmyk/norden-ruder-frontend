@@ -1,6 +1,6 @@
 {
   "rewrites": [
     { "source": "/survey", "destination": "/norden_ruder_survey.html" },
-    { "source": "/admin", "destination": "/norden_ruder_admin.html" }
+   { "source": "/admin", "destination": "/norden_ruder_admin-2.html" }
   ]
 }
