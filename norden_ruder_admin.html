@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>路得行旅｜後台管理</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --brand:#2C6E4F;--brand-light:#E1F5EE;--brand-dark:#1a4a32;
+    --gray:#6B7280;--border:#E5E7EB;--bg:#F7F6F2;
+    --danger:#DC2626;--danger-light:#FEF2F2;
+    --success:#16A34A;--success-light:#F0FDF4;
+    --warn:#D97706;--warn-light:#FFFBEB;
+    --text:#111827;--text2:#374151;
+  }
+  body{font-family:-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+  /* Sidebar */
+  .layout{display:flex;min-height:100vh;}
+  .sidebar{width:200px;background:var(--brand-dark);padding:1.5rem 0;flex-shrink:0;display:flex;flex-direction:column;}
+  .sidebar-logo{padding:0 1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.1);}
+  .sidebar-logo-name{font-size:13px;font-weight:700;color:#fff;line-height:1.3;}
+  .sidebar-logo-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;}
+  .nav{padding:1rem 0;flex:1;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:10px 1.25rem;font-size:13px;color:rgba(255,255,255,0.65);cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;}
+  .nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+  .nav-item.active{background:rgba(255,255,255,0.12);color:#fff;border-left-color:#fff;}
+  .nav-icon{font-size:16px;width:18px;text-align:center;}
+  .sidebar-branch{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,0.1);}
+  .branch-label{font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+  .branch-select{width:100%;padding:6px 8px;font-size:12px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;}
+  .branch-select option{background:var(--brand-dark);color:#fff;}
+
+  /* Main */
+  .main{flex:1;overflow-y:auto;}
+  .topbar{background:#fff;border-bottom:1px solid var(--border);padding:0.875rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+  .topbar-title{font-size:16px;font-weight:600;color:var(--text);}
+  .topbar-time{font-size:12px;color:var(--gray);}
+  .content{padding:1.5rem;}
+
+  /* Pages */
+  .page{display:none;}
+  .page.active{display:block;}
+
+  /* Stats row */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1.5rem;}
+  .stat-card{background:#fff;border-radius:12px;padding:1rem 1.25rem;border:1px solid var(--border);}
+  .stat-label{font-size:12px;color:var(--gray);margin-bottom:4px;}
+  .stat-val{font-size:26px;font-weight:700;color:var(--text);}
+  .stat-sub{font-size:11px;color:var(--gray);margin-top:2px;}
+  .stat-card.green .stat-val{color:var(--success);}
+  .stat-card.amber .stat-val{color:var(--warn);}
+  .stat-card.red .stat-val{color:var(--danger);}
+
+  /* Coupon checker */
+  .checker-card{background:#fff;border-radius:12px;padding:1.25rem;border:1px solid var(--border);margin-bottom:1.25rem;}
+  .checker-title{font-size:14px;font-weight:600;margin-bottom:1rem;color:var(--text);}
+  .checker-row{display:flex;gap:10px;}
+  .checker-input{flex:1;padding:11px 14px;font-size:16px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;letter-spacing:1px;text-transform:uppercase;color:var(--text);}
+  .checker-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(44,110,79,0.12);}
+  .checker-btn{padding:11px 20px;border-radius:10px;background:var(--brand);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+  .checker-btn:hover{opacity:0.88;}
+
+  /* Result card */
+  .result-card{border-radius:12px;padding:1.25rem;margin-top:1rem;display:none;}
+  .result-card.valid{background:var(--success-light);border:1px solid #86EFAC;}
+  .result-card.invalid{background:var(--danger-light);border:1px solid #FCA5A5;}
+  .result-card.used{background:var(--warn-light);border:1px solid #FCD34D;}
+  .result-status{font-size:15px;font-weight:700;margin-bottom:0.75rem;}
+  .result-card.valid .result-status{color:var(--success);}
+  .result-card.invalid .result-status{color:var(--danger);}
+  .result-card.used .result-status{color:var(--warn);}
+  .result-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;}
+  .result-row{display:flex;justify-content:space-between;font-size:13px;}
+  .result-row-label{color:var(--gray);}
+  .result-row-val{font-weight:500;color:var(--text);}
+  .redeem-btn{width:100%;padding:12px;border-radius:10px;background:var(--success);color:#fff;border:none;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;}
+  .redeem-btn:hover{opacity:0.88;}
+  .redeem-btn:disabled{background:#D1D5DB;cursor:not-allowed;}
+
+  /* Table */
+  .table-card{background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden;}
+  .table-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;}
+  .table-title{font-size:14px;font-weight:600;}
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:0.5rem;}
+  .filter-btn{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--gray);cursor:pointer;}
+  .filter-btn.on{background:var(--brand-light);color:var(--brand);border-color:var(--brand);}
+  .search-input{padding:7px 12px;font-size:13px;border:1px solid var(--border);border-radius:8px;font-family:inherit;color:var(--text);width:100%;margin-bottom:10px;}
+  .search-input:focus{outline:none;border-color:var(--brand);}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{padding:10px 1rem;text-align:left;font-size:11px;font-weight:600;color:var(--gray);border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody tr{border-bottom:1px solid var(--border);transition:background 0.1s;}
+  tbody tr:last-child{border-bottom:none;}
+  tbody tr:hover{background:#F9FAFB;}
+  td{padding:10px 1rem;color:var(--text2);vertical-align:middle;}
+  .badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;}
+  .badge.unused{background:var(--success-light);color:var(--success);}
+  .badge.used{background:#F3F4F6;color:var(--gray);}
+  .badge.tc{background:#EDE9FE;color:#6D28D9;}
+  .badge.tt1{background:#FEF3C7;color:#92400E;}
+  .badge.tt2{background:#DBEAFE;color:#1E40AF;}
+  .code{font-family:'Courier New',monospace;font-size:13px;font-weight:600;letter-spacing:1px;color:var(--brand);}
+  .star-small{color:#F59E0B;font-size:12px;}
+  .action-btn{font-size:12px;padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;font-family:inherit;color:var(--text2);}
+  .action-btn.redeem{border-color:var(--success);color:var(--success);}
+  .action-btn.redeem:hover{background:var(--success-light);}
+  .action-btn:disabled{color:#9CA3AF;border-color:var(--border);cursor:not-allowed;}
+
+  /* Staff praise */
+  .praise-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.5rem;}
+  .praise-card{background:#fff;border-radius:12px;padding:1rem;border:1px solid var(--border);}
+  .praise-name{font-size:14px;font-weight:600;margin-bottom:4px;}
+  .praise-count{font-size:24px;font-weight:700;color:var(--brand);}
+  .praise-label{font-size:11px;color:var(--gray);}
+  .praise-bar{height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden;}
+  .praise-fill{height:100%;background:var(--brand);border-radius:2px;}
+
+  /* Empty state */
+  .empty{text-align:center;padding:3rem 1rem;color:var(--gray);}
+  .empty-icon{font-size:40px;margin-bottom:0.75rem;}
+  .empty-text{font-size:14px;}
+
+  /* Modal overlay */
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;align-items:center;justify-content:center;}
+  .modal-bg.show{display:flex;}
+  .modal{background:#fff;border-radius:16px;padding:1.5rem;width:90%;max-width:380px;}
+  .modal-title{font-size:16px;font-weight:700;margin-bottom:0.5rem;}
+  .modal-sub{font-size:13px;color:var(--gray);margin-bottom:1.25rem;line-height:1.6;}
+  .modal-btns{display:flex;gap:10px;}
+  .modal-cancel{flex:1;padding:11px;border-radius:10px;border:1px solid var(--border);background:transparent;font-size:14px;cursor:pointer;font-family:inherit;}
+  .modal-confirm{flex:1;padding:11px;border-radius:10px;background:var(--success);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-name">路得行旅</div>
+      <div class="sidebar-logo-sub">Norden Ruder 後台</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active" onclick="goPage('redeem')">
+        <span class="nav-icon">🎟</span> 抵用金核銷
+      </div>
+      <div class="nav-item" onclick="goPage('records')">
+        <span class="nav-icon">📋</span> 填寫紀錄
+      </div>
+      <div class="nav-item" onclick="goPage('praise')">
+        <span class="nav-icon">⭐</span> 人員表揚
+      </div>
+      <div class="nav-item" onclick="goPage('stats')">
+        <span class="nav-icon">📊</span> 統計分析
+      </div>
+    </nav>
+    <div class="sidebar-branch">
+      <div class="branch-label">查看館別</div>
+      <select class="branch-select" id="branch-filter" onchange="applyBranchFilter()">
+        <option value="all">全部館別</option>
+        <option value="tc">台中館</option>
+        <option value="tt1">台東1館</option>
+        <option value="tt2">台東2館</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">抵用金核銷</div>
+      <div class="topbar-time" id="top-time"></div>
+    </div>
+    <div class="content">
+
+      <!-- Page: Redeem -->
+      <div class="page active" id="page-redeem">
+        <div class="checker-card">
+          <div class="checker-title">輸入或掃描抵用金代碼</div>
+          <div class="checker-row">
+            <input class="checker-input" id="code-input" placeholder="NR-XXXXXX" maxlength="9" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')checkCode()"/>
+            <button class="checker-btn" onclick="checkCode()">查詢</button>
+          </div>
+          <div id="result-area"></div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">今日核銷紀錄</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>代碼</th><th>顧客 Email</th><th>館別</th><th>核銷時間</th>
+              </tr>
+            </thead>
+            <tbody id="today-tbody">
+              <tr><td colspan="4"><div class="empty"><div class="empty-icon">📭</div><div class="empty-text">今日尚無核銷紀錄</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Page: Records -->
+      <div class="page" id="page-records">
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">總填寫數</div>
+            <div class="stat-val" id="stat-total">0</div>
+            <div class="stat-sub">累計問卷</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">未使用抵用金</div>
+            <div class="stat-val" id="stat-unused">0</div>
+            <div class="stat-sub">待核銷</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-label">已核銷</div>
+            <div class="stat-val" id="stat-used">0</div>
+            <div class="stat-sub">已使用</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">平均整體評分</div>
+            <div class="stat-val" id="stat-avg">—</div>
+            <div class="stat-sub">滿分 5 分</div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <div>
+              <div class="table-title">所有填寫紀錄</div>
+              <div class="filter-row">
+                <button class="filter-btn on" onclick="filterStatus('all',this)">全部</button>
+                <button class="filter-btn" onclick="filterStatus('unused',this)">未使用</button>
+                <button class="filter-btn" onclick="filterStatus('used',this)">已核銷</button>
+              </div>
+            </div>
+          </div>
+          <div style="padding:0.75rem 1rem 0;">
+            <input class="search-input" id="search-input" placeholder="搜尋 email 或代碼..." oninput="renderTable()"/>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>代碼</th><th>Email</th><th>館別</th><th>整體</th><th>NPS</th><th>狀態</th><th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="records-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Page: Praise -->
+      <div class="page" id="page-praise">
+        <div style="display:flex;gap:12px;margin-bottom:1.25rem;">
+          <button class="filter-btn on" id="praise-desk-btn" onclick="setPraiseType('desk')">櫃檯人員</button>
+          <button class="filter-btn" id="praise-room-btn" onclick="setPraiseType('room')">房務人員</button>
+        </div>
+        <div class="praise-grid" id="praise-grid"></div>
+      </div>
+
+      <!-- Page: Stats -->
+      <div class="page" id="page-stats">
+        <div class="stats">
+          <div class="stat-card green">
+            <div class="stat-label">平均整體評分</div>
+            <div class="stat-val" id="avg-overall">—</div>
+            <div class="stat-sub">/ 5 分</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">平均 NPS</div>
+            <div class="stat-val" id="avg-nps">—</div>
+            <div class="stat-sub">/ 10 分</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">平均櫃檯評分</div>
+            <div class="stat-val" id="avg-desk">—</div>
+            <div class="stat-sub">/ 5 分</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">平均房間整潔</div>
+            <div class="stat-val" id="avg-clean">—</div>
+            <div class="stat-sub">/ 5 分</div>
+          </div>
+        </div>
+
+        <div class="table-card" style="margin-bottom:1.25rem;">
+          <div class="table-header"><div class="table-title">訂房管道分佈</div></div>
+          <div style="padding:1rem;" id="channel-chart"></div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header"><div class="table-title">顧客留言</div></div>
+          <div id="comments-list" style="padding:0.75rem 1rem;display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- Confirm Modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-title">確認核銷抵用金</div>
+    <div class="modal-sub" id="modal-body">確定要核銷此代碼嗎？核銷後無法撤銷，請在旅安系統手動輸入 NT$50 折扣。</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">取消</button>
+      <button class="modal-confirm" onclick="confirmRedeem()">確認核銷</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var API_URL = 'https://norden-ruder-api-production.up.railway.app';
+var ADMIN_KEY = 'NR-admin-2026';
+
+function authHeaders(){
+  return {'Content-Type':'application/json','x-admin-key':ADMIN_KEY};
+}
+
+async function loadSubmissions(){
+  var branch = document.getElementById('branch-filter').value;
+  var res = await fetch(API_URL+'/api/submissions?branch='+branch, {headers:authHeaders()});
+  var data = await res.json();
+  return data.data || [];
+}
+
+// ── Demo data (fallback) ─────────────────────────────────────
+var BRANCH_NAME = {tc:'台中館', tt1:'台東1館', tt2:'台東2館', taichung:'台中館', taitung1:'台東1館', taitung2:'台東2館'};
+var CHANNEL_NAME = {agoda:'Agoda', booking:'Booking.com', official:'官網直訂', expedia:'Expedia', other:'其他'};
+
+var RECORDS = [];
+
+var todayRedeemed = [];
+var pendingCode = null;
+var currentFilter = 'all';
+var praiseType = 'desk';
+var branchFilter = 'all';
+
+// ── Nav ────────────────────────────────────────────────────
+function goPage(name){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  event.currentTarget.classList.add('active');
+  var titles={redeem:'抵用金核銷',records:'填寫紀錄',praise:'人員表揚',stats:'統計分析'};
+  document.getElementById('page-title').textContent=titles[name];
+  if(name==='records'){updateStats();renderTable();}
+  if(name==='praise'){renderPraise();}
+  if(name==='stats'){renderStats();}
+}
+
+function applyBranchFilter(){
+  branchFilter=document.getElementById('branch-filter').value;
+  updateStats();renderTable();
+  loadSubmissions().then(function(d){RECORDS=d;renderPraise();renderStats();});
+}
+
+function getFiltered(){
+  return RECORDS.filter(function(r){
+    return branchFilter==='all'||r.branch===branchFilter;
+  });
+}
+
+// ── Coupon checker ─────────────────────────────────────────
+async function checkCode(){
+  var code=document.getElementById('code-input').value.trim().toUpperCase();
+  if(!code){return;}
+  var area=document.getElementById('result-area');
+  area.innerHTML='<div style="padding:1rem;color:var(--gray);font-size:14px;">查詢中...</div>';
+  try {
+    var res=await fetch(API_URL+'/api/coupon/'+code, {headers:authHeaders()});
+    if(res.status===404){
+      area.innerHTML='<div class="result-card invalid" style="display:block;"><div class="result-status">✗ 代碼無效</div><div style="font-size:13px;color:var(--danger);">查無此代碼，請確認輸入是否正確。</div></div>';
+      return;
+    }
+    var rec=await res.json();
+    if(rec.coupon_used){
+      var usedAt=rec.coupon_used_at?new Date(rec.coupon_used_at).toLocaleString('zh-TW'):'';
+      area.innerHTML='<div class="result-card used" style="display:block;"><div class="result-status">⚠ 此代碼已核銷</div><div class="result-rows"><div class="result-row"><span class="result-row-label">Email</span><span class="result-row-val">'+rec.email+'</span></div><div class="result-row"><span class="result-row-label">館別</span><span class="result-row-val">'+BRANCH_NAME[rec.branch]+'</span></div><div class="result-row"><span class="result-row-label">核銷時間</span><span class="result-row-val">'+usedAt+'</span></div></div><button class="redeem-btn" disabled>已核銷</button></div>';
+      return;
+    }
+    pendingCode=code;
+    var stars='★'.repeat(rec.score_overall||0)+'☆'.repeat(5-(rec.score_overall||0));
+    var createdAt=new Date(rec.created_at).toLocaleString('zh-TW');
+    var expiryAt=rec.expiry_date?new Date(rec.expiry_date).toLocaleDateString('zh-TW'):'';
+    if(rec.is_expired){
+      area.innerHTML='<div class="result-card used" style="display:block;"><div class="result-status">✗ 此代碼已過期</div><div class="result-rows"><div class="result-row"><span class="result-row-label">Email</span><span class="result-row-val">'+rec.email+'</span></div><div class="result-row"><span class="result-row-label">到期日</span><span class="result-row-val">'+expiryAt+'</span></div></div><button class="redeem-btn" disabled>已過期</button></div>';
+      return;
+    }
+    area.innerHTML='<div class="result-card valid" style="display:block;"><div class="result-status">✓ 代碼有效！可使用 NT$50 折扣</div><div class="result-rows"><div class="result-row"><span class="result-row-label">Email</span><span class="result-row-val">'+rec.email+'</span></div><div class="result-row"><span class="result-row-label">館別</span><span class="result-row-val">'+BRANCH_NAME[rec.branch]+'</span></div><div class="result-row"><span class="result-row-label">填寫時間</span><span class="result-row-val">'+createdAt+'</span></div><div class="result-row"><span class="result-row-label">到期日</span><span class="result-row-val">'+expiryAt+'</span></div><div class="result-row"><span class="result-row-label">整體評分</span><span class="result-row-val" style="color:#F59E0B;">'+stars+'</span></div></div><button class="redeem-btn" onclick="openModal()">核銷此代碼（折抵 NT$50）</button></div>';
+  } catch(e){
+    area.innerHTML='<div class="result-card invalid" style="display:block;"><div class="result-status">✗ 網路錯誤</div><div style="font-size:13px;color:var(--danger);">請稍後再試。</div></div>';
+  }
+}
+
+function openModal(){
+  document.getElementById('modal-body').textContent='確定要核銷代碼 '+pendingCode+' 嗎？核銷後無法撤銷，請同時在旅安系統手動輸入 NT$50 折扣。';
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+
+async function confirmRedeem(){
+  closeModal();
+  try {
+    var res=await fetch(API_URL+'/api/coupon/'+pendingCode+'/redeem', {method:'POST',headers:authHeaders()});
+    var data=await res.json();
+    if(data.success){
+      var now=new Date();
+      var ts=now.toLocaleString('zh-TW');
+      todayRedeemed.push({code:pendingCode,time:ts});
+      renderTodayTable();
+      document.getElementById('result-area').innerHTML='<div class="result-card used" style="display:block;"><div class="result-status">✓ 核銷完成！</div><div style="font-size:13px;color:var(--warn);">請在旅安系統手動輸入 NT$50 折扣後完成結帳。</div></div>';
+      document.getElementById('code-input').value='';
+      pendingCode=null;
+    }
+  } catch(e){
+    alert('核銷失敗，請稍後再試');
+  }
+}
+
+function renderTodayTable(){
+  var tb=document.getElementById('today-tbody');
+  if(todayRedeemed.length===0){
+    tb.innerHTML='<tr><td colspan="4"><div class="empty"><div class="empty-icon">📭</div><div class="empty-text">今日尚無核銷紀錄</div></div></td></tr>';
+    return;
+  }
+  tb.innerHTML=todayRedeemed.map(function(r){
+    return '<tr><td><span class="code">'+r.code+'</span></td><td>'+r.email+'</td><td><span class="badge '+r.branch+'">'+BRANCH_NAME[r.branch]+'</span></td><td>'+r.time+'</td></tr>';
+  }).join('');
+}
+
+// ── Records table ──────────────────────────────────────────
+async function updateStats(){
+  var data = await loadSubmissions();
+  RECORDS = data;
+  document.getElementById('stat-total').textContent=data.length;
+  document.getElementById('stat-unused').textContent=data.filter(function(r){return !r.coupon_used;}).length;
+  document.getElementById('stat-used').textContent=data.filter(function(r){return r.coupon_used;}).length;
+  var avg=data.length?(data.reduce(function(s,r){return s+(r.score_overall||0);},0)/data.length).toFixed(1):'—';
+  document.getElementById('stat-avg').textContent=avg;
+}
+
+function filterStatus(status, btn){
+  currentFilter=status;
+  document.querySelectorAll('#page-records .filter-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  renderTable();
+}
+
+function renderTable(){
+  var search=(document.getElementById('search-input')||{value:''}).value.toLowerCase();
+  var data=getFiltered().filter(function(r){
+    if(currentFilter==='unused'&&r.used)return false;
+    if(currentFilter==='used'&&!r.used)return false;
+    if(search&&r.email.toLowerCase().indexOf(search)<0&&r.code.toLowerCase().indexOf(search)<0)return false;
+    return true;
+  });
+  var tb=document.getElementById('records-tbody');
+  if(!data.length){
+    tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">沒有符合的紀錄</div></div></td></tr>';
+    return;
+  }
+  tb.innerHTML=data.map(function(r){
+    var stars='<span class="star-small">'+'★'.repeat(r.overall)+'<span style="color:#D1D5DB;">'+'★'.repeat(5-r.overall)+'</span></span>';
+    var badge=r.used?'<span class="badge used">已核銷</span>':'<span class="badge unused">未使用</span>';
+    var btn=r.used?'<button class="action-btn" disabled>已核銷</button>':'<button class="action-btn redeem" onclick="quickRedeem(\''+r.code+'\')">核銷</button>';
+    return '<tr><td><span class="code">'+r.code+'</span></td><td style="font-size:12px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+r.email+'</td><td><span class="badge '+r.branch+'">'+BRANCH_NAME[r.branch]+'</span></td><td>'+stars+'</td><td>'+r.nps+'</td><td>'+badge+'</td><td>'+btn+'</td></tr>';
+  }).join('');
+}
+
+function quickRedeem(code){
+  document.getElementById('code-input').value=code;
+  goPage('redeem');
+  checkCode();
+}
+
+// ── Praise ─────────────────────────────────────────────────
+function setPraiseType(type){
+  praiseType=type;
+  document.getElementById('praise-desk-btn').classList.toggle('on',type==='desk');
+  document.getElementById('praise-room-btn').classList.toggle('on',type==='room');
+  renderPraise();
+}
+
+function renderPraise(){
+  var data=getFiltered();
+  var counts={};
+  data.forEach(function(r){
+    var name=praiseType==='desk'?r.deskName:r.roomName;
+    if(name){counts[name]=(counts[name]||0)+1;}
+  });
+  var sorted=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];});
+  var max=sorted.length?counts[sorted[0]]:1;
+  var grid=document.getElementById('praise-grid');
+  if(!sorted.length){
+    grid.innerHTML='<div style="grid-column:span 2;"><div class="empty"><div class="empty-icon">🏅</div><div class="empty-text">尚無表揚紀錄</div></div></div>';
+    return;
+  }
+  grid.innerHTML=sorted.map(function(name,i){
+    var cnt=counts[name];
+    var pct=Math.round((cnt/max)*100);
+    var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    return '<div class="praise-card"><div class="praise-name">'+medal+' '+name+'</div><div class="praise-count">'+cnt+'</div><div class="praise-label">次被表揚</div><div class="praise-bar"><div class="praise-fill" style="width:'+pct+'%"></div></div></div>';
+  }).join('');
+}
+
+// ── Stats ──────────────────────────────────────────────────
+function renderStats(){
+  var data=getFiltered();
+  if(!data.length){
+    ['avg-overall','avg-nps','avg-desk','avg-clean'].forEach(function(id){document.getElementById(id).textContent='—';});
+    return;
+  }
+  function avg(arr){return (arr.reduce(function(s,v){return s+v;},0)/arr.length).toFixed(1);}
+  document.getElementById('avg-overall').textContent=avg(data.map(function(r){return r.overall;}));
+  document.getElementById('avg-nps').textContent=avg(data.map(function(r){return r.nps;}));
+  document.getElementById('avg-desk').textContent=avg(data.map(function(r){return r.desk;}));
+  document.getElementById('avg-clean').textContent=avg(data.map(function(r){return r.clean;}));
+
+  // Channel chart
+  var chCount={};
+  data.forEach(function(r){chCount[r.ch]=(chCount[r.ch]||0)+1;});
+  var total=data.length;
+  var chHtml=Object.keys(chCount).sort(function(a,b){return chCount[b]-chCount[a];}).map(function(ch){
+    var pct=Math.round((chCount[ch]/total)*100);
+    return '<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>'+CHANNEL_NAME[ch]+'</span><span style="color:var(--gray);">'+chCount[ch]+' 筆（'+pct+'%）</span></div><div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;background:var(--brand);border-radius:4px;width:'+pct+'%;"></div></div></div>';
+  }).join('');
+  document.getElementById('channel-chart').innerHTML=chHtml;
+
+  // Comments
+  var comments=data.filter(function(r){return r.comment;});
+  var cHtml=comments.length?comments.map(function(r){
+    return '<div style="padding:0.875rem;background:var(--bg);border-radius:8px;"><div style="font-size:12px;color:var(--gray);margin-bottom:4px;">'+BRANCH_NAME[r.branch]+' ・ '+r.date+'</div><div style="font-size:14px;color:var(--text2);">'+r.comment+'</div></div>';
+  }).join(''):'<div class="empty"><div class="empty-icon">💬</div><div class="empty-text">尚無顧客留言</div></div>';
+  document.getElementById('comments-list').innerHTML=cHtml;
+}
+
+// ── Clock ──────────────────────────────────────────────────
+function tick(){
+  var now=new Date();
+  var d=now.getFullYear()+'/'+(now.getMonth()+1).toString().padStart(2,'0')+'/'+now.getDate().toString().padStart(2,'0');
+  var t=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('top-time').textContent=d+' '+t;
+}
+tick(); setInterval(tick,1000);
+updateStats(); renderTable(); loadSubmissions().then(function(d){RECORDS=d;renderPraise();renderStats();});
+</script>
+</body>
+</html>
