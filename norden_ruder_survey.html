@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>路得行旅 Norden Ruder｜住宿回饋問卷</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif; background: #F7F6F2; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 1.5rem 1rem 3rem; }
+  .card { background: #fff; border-radius: 16px; padding: 1.5rem; width: 100%; max-width: 480px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+  :root { --brand: #2C6E4F; --brand-light: #E1F5EE; --brand-mid: #1D9E75; --gray: #6B7280; --border: #E5E7EB; --danger: #DC2626; }
+  .lt { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 1rem; }
+  .lb { font-size: 12px; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--gray); cursor: pointer; }
+  .lb.on { background: var(--brand-light); color: var(--brand); border-color: var(--brand); }
+  .pbar { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+  .pfill { height: 100%; background: var(--brand); transition: width 0.4s ease; border-radius: 2px; }
+  .hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+  .lmark { width: 38px; height: 38px; border-radius: 50%; background: var(--brand-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .lname { font-size: 14px; font-weight: 600; color: #111; }
+  .lsub { font-size: 11px; color: var(--gray); }
+  .step { display: none; }
+  .step.on { display: block; animation: fi 0.3s ease; }
+  @keyframes fi { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .slbl { font-size: 12px; color: var(--gray); margin-bottom: 0.4rem; }
+  .sq { font-size: 18px; font-weight: 600; color: #111; margin-bottom: 0.3rem; line-height: 1.4; }
+  .ssub { font-size: 13px; color: var(--gray); margin-bottom: 1.25rem; }
+  input[type=email], select, textarea {
+    width: 100%; padding: 11px 14px; font-size: 15px;
+    border: 1px solid var(--border); border-radius: 10px;
+    background: #fff; color: #111; font-family: inherit;
+  }
+  input[type=email]:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(44,110,79,0.12);
+  }
+  textarea { resize: vertical; min-height: 90px; }
+  .emsg { font-size: 12px; color: var(--danger); margin-top: 5px; display: none; }
+  .og { display: flex; flex-direction: column; gap: 8px; }
+  .oi { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; background: #fff; }
+  .oi:hover, .oi.sel { border-color: var(--brand); background: var(--brand-light); }
+  .ock { width: 20px; height: 20px; border-radius: 5px; border: 1.5px solid #ccc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .oi.sel .ock { background: var(--brand); border-color: var(--brand); }
+  .ock svg { display: none; }
+  .oi.sel .ock svg { display: block; }
+  .radio .ock { border-radius: 50%; }
+  .otxt { font-size: 14px; color: #111; }
+  .srow { display: flex; gap: 8px; margin: 0.75rem 0 0.25rem; }
+  .star { font-size: 36px; cursor: pointer; transition: transform 0.1s; line-height: 1; color: #D1D5DB; user-select: none; }
+  .star.lit { color: #F59E0B; }
+  .star:hover { transform: scale(1.15); }
+  .slb2 { font-size: 13px; color: var(--gray); margin-top: 6px; min-height: 20px; }
+  .nrow { display: flex; gap: 4px; flex-wrap: wrap; margin: 0.75rem 0 0.25rem; }
+  .nb { flex: 1; min-width: 26px; padding: 9px 2px; border-radius: 8px; border: 1px solid var(--border); background: transparent; cursor: pointer; font-size: 13px; color: #111; transition: all 0.15s; font-family: inherit; }
+  .nb.sel { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .nlbls { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray); margin-top: 4px; }
+  .brow { display: flex; gap: 10px; margin-top: 1.75rem; }
+  .bnext { flex: 1; padding: 14px; border-radius: 10px; background: var(--brand); color: #fff; border: none; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; font-family: inherit; }
+  .bnext:hover { opacity: 0.88; }
+  .bback { padding: 14px 18px; border-radius: 10px; background: transparent; border: 1px solid var(--border); color: var(--gray); font-size: 15px; cursor: pointer; font-family: inherit; }
+  .skip-note { font-size: 12px; color: var(--gray); margin-top: 8px; }
+  .done-wrap { text-align: center; padding: 1rem 0; }
+  .done-icon { font-size: 48px; margin-bottom: 1rem; }
+  .done-title { font-size: 20px; font-weight: 700; color: var(--brand); margin-bottom: 0.5rem; }
+  .done-sub { font-size: 14px; color: var(--gray); line-height: 1.7; margin-bottom: 1.25rem; }
+  .cbox { padding: 1rem; background: var(--brand-light); border-radius: 12px; border: 1.5px dashed var(--brand); }
+  .clbl { font-size: 12px; color: var(--gray); margin-bottom: 6px; }
+  .cval { font-size: 24px; font-weight: 700; color: var(--brand); letter-spacing: 3px; font-family: 'Courier New', monospace; }
+  .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="lt">
+    <button class="lb on" onclick="setL('zh')" id="bzh">中文</button>
+    <button class="lb" onclick="setL('en')" id="ben">English</button>
+  </div>
+  <div class="hdr">
+    <div class="lmark">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M12 2C8.5 2 5 6 5 10.5c0 6 7 11.5 7 11.5s7-5.5 7-11.5C19 6 15.5 2 12 2z" fill="#2C6E4F" opacity="0.8"/>
+        <circle cx="12" cy="10.5" r="3" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <div class="lname">路得行旅 Norden Ruder</div>
+      <div class="lsub" id="hsub">住宿回饋問卷</div>
+    </div>
+  </div>
+  <div class="pbar"><div class="pfill" id="prog" style="width:10%"></div></div>
+
+  <!-- Step 0: Email -->
+  <div id="s0" class="step on">
+    <div class="slbl" id="s0l">步驟 1 / 10</div>
+    <div class="sq" id="s0q">您的 Email 信箱</div>
+    <div class="ssub" id="s0s">完成後抵用金代碼將寄送至此信箱，每個信箱限填一次</div>
+    <input type="email" id="imail" placeholder="your@email.com"/>
+    <div class="emsg" id="emerr">請輸入有效的 email 地址</div>
+    <div class="brow"><button class="bnext" onclick="n(0)" id="b0">下一步</button></div>
+  </div>
+
+  <!-- Step 1: Branch -->
+  <div id="s1" class="step">
+    <div class="slbl" id="s1l">步驟 2 / 10</div>
+    <div class="sq" id="s1q">您入住的是哪個館？</div>
+    <div class="ssub" id="s1s">請選擇一項</div>
+    <div class="og">
+      <div class="oi radio" onclick="selR('branch','tc',this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="btc">台中館</span></div>
+      <div class="oi radio" onclick="selR('branch','tt1',this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="btt1">台東1館</span></div>
+      <div class="oi radio" onclick="selR('branch','tt2',this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="btt2">台東2館</span></div>
+    </div>
+    <div class="brow"><button class="bback" onclick="bk(1)">←</button><button class="bnext" onclick="n(1)" id="b1">下一步</button></div>
+  </div>
+
+  <!-- Step 2: Channel -->
+  <div id="s2" class="step">
+    <div class="slbl" id="s2l">步驟 3 / 10</div>
+    <div class="sq" id="s2q">這次從哪個管道訂房？</div>
+    <div class="ssub" id="s2s">請選擇一項</div>
+    <div class="og">
+      <div class="oi radio" onclick="selR('ch','agoda',this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt">Agoda</span></div>
+      <div class="oi radio" onclick="selR('ch','booking',this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt">Booking.com</span></div>
+      <div class="oi radio" onclick="selR('ch','official',this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="chof">官網直訂</span></div>
+      <div class="oi radio" onclick="selR('ch','expedia',this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt">Expedia / Hotels.com</span></div>
+      <div class="oi radio" onclick="selR('ch','other',this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="chot">其他</span></div>
+    </div>
+    <div class="brow"><button class="bback" onclick="bk(2)">←</button><button class="bnext" onclick="n(2)" id="b2">下一步</button></div>
+  </div>
+
+  <!-- Step 3: Reasons -->
+  <div id="s3" class="step">
+    <div class="slbl" id="s3l">步驟 4 / 10</div>
+    <div class="sq" id="s3q">選擇入住路得行旅的主要原因</div>
+    <div class="ssub" id="s3s">可複選</div>
+    <div class="og">
+      <div class="oi" onclick="tog(this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="r1">朋友或旅人推薦</span></div>
+      <div class="oi" onclick="tog(this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="r2">社群媒體或網路搜尋</span></div>
+      <div class="oi" onclick="tog(this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="r3">訂房網站評價</span></div>
+      <div class="oi" onclick="tog(this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="r4">房間價格</span></div>
+      <div class="oi" onclick="tog(this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="r5">空間設計與氛圍</span></div>
+      <div class="oi" onclick="tog(this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="r6">交通位置便利</span></div>
+      <div class="oi" onclick="tog(this)"><div class="ock"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="otxt" id="r7">曾經入住過</span></div>
+    </div>
+    <div class="brow"><button class="bback" onclick="bk(3)">←</button><button class="bnext" onclick="n(3)" id="b3">下一步</button></div>
+  </div>
+
+  <!-- Step 4: Overall stars -->
+  <div id="s4" class="step">
+    <div class="slbl" id="s4l">步驟 5 / 10</div>
+    <div class="sq" id="s4q">整體住宿體驗</div>
+    <div class="ssub" id="s4s">Overall experience</div>
+    <div class="srow" id="st-ov"></div>
+    <div class="slb2" id="ll-ov"></div>
+    <div class="brow"><button class="bback" onclick="bk(4)">←</button><button class="bnext" onclick="n(4)" id="b4">下一步</button></div>
+  </div>
+
+  <!-- Step 5: Desk stars -->
+  <div id="s5" class="step">
+    <div class="slbl" id="s5l">步驟 6 / 10</div>
+    <div class="sq" id="s5q">櫃檯服務評分</div>
+    <div class="ssub" id="s5s">Front desk service</div>
+    <div class="srow" id="st-dk"></div>
+    <div class="slb2" id="ll-dk"></div>
+    <div class="brow"><button class="bback" onclick="bk(5)">←</button><button class="bnext" onclick="n(5)" id="b5">下一步</button></div>
+  </div>
+
+  <!-- Step 6: Commend desk staff -->
+  <div id="s6" class="step">
+    <div class="slbl" id="s6l">步驟 7 / 10</div>
+    <div class="sq" id="s6q">表揚櫃檯人員</div>
+    <div class="ssub" id="s6s">這次服務您的櫃檯人員是誰？（選填）</div>
+    <select id="sel-desk"></select>
+    <div class="skip-note" id="sk1">不確定或不想選擇可直接點「下一步」跳過</div>
+    <div class="brow"><button class="bback" onclick="bk(6)">←</button><button class="bnext" onclick="n(6)" id="b6">下一步</button></div>
+  </div>
+
+  <!-- Step 7: Room cleanliness stars -->
+  <div id="s7" class="step">
+    <div class="slbl" id="s7l">步驟 8 / 10</div>
+    <div class="sq" id="s7q">房間整潔評分</div>
+    <div class="ssub" id="s7s">Room cleanliness</div>
+    <div class="srow" id="st-cl"></div>
+    <div class="slb2" id="ll-cl"></div>
+    <div class="brow"><button class="bback" onclick="bk(7)">←</button><button class="bnext" onclick="n(7)" id="b7">下一步</button></div>
+  </div>
+
+  <!-- Step 8: Commend room staff -->
+  <div id="s8" class="step">
+    <div class="slbl" id="s8l">步驟 9 / 10</div>
+    <div class="sq" id="s8q">表揚房務人員</div>
+    <div class="ssub" id="s8s">這次打掃您房間的房務人員是誰？（選填）</div>
+    <select id="sel-room"></select>
+    <div class="skip-note" id="sk2">不確定或不想選擇可直接點「下一步」跳過</div>
+    <div class="brow"><button class="bback" onclick="bk(8)">←</button><button class="bnext" onclick="n(8)" id="b8">下一步</button></div>
+  </div>
+
+  <!-- Step 9: NPS + Comment -->
+  <div id="s9" class="step">
+    <div class="slbl" id="s9l">步驟 10 / 10</div>
+    <div class="sq" id="s9q">您願意推薦路得行旅給朋友嗎？</div>
+    <div class="ssub" id="s9s">0 = 完全不願意 ／ 10 = 非常願意推薦</div>
+    <div class="nrow" id="nps-row"></div>
+    <div class="nlbls"><span id="nl">不願意推薦</span><span id="nr">非常願意推薦</span></div>
+    <div class="divider"></div>
+    <div class="sq" style="font-size:15px;margin-bottom:0.3rem;" id="s9q2">給我們的話（選填）</div>
+    <div class="ssub" id="s9s2">任何建議或讓您印象深刻的事，都歡迎分享</div>
+    <textarea id="icomment" placeholder="請自由分享您的想法..."></textarea>
+    <div class="brow"><button class="bback" onclick="bk(9)">←</button><button class="bnext" onclick="submit()" id="b9">送出並領取抵用金</button></div>
+  </div>
+
+  <!-- Done -->
+  <div id="sdone" class="step">
+    <div class="done-wrap">
+      <div class="done-icon">🎉</div>
+      <div class="done-title" id="dt">感謝您的回饋！</div>
+      <div class="done-sub" id="ds">抵用金代碼已寄送至您的信箱。<br>下次入住時出示給櫃檯即可折抵 NT$50。</div>
+      <div class="cbox">
+        <div class="clbl" id="cl">您的專屬抵用金代碼（demo 示意）</div>
+        <div class="cval" id="cv">NR-XXXXXX</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Already filled -->
+  <div id="salready" class="step">
+    <div style="text-align:center;padding:2rem 0;">
+      <div style="font-size:40px;margin-bottom:1rem;">✓</div>
+      <div style="font-size:17px;font-weight:600;color:#111;margin-bottom:0.5rem;" id="at">您已填寫過問卷</div>
+      <div style="font-size:14px;color:var(--gray);line-height:1.7;" id="as">此 email 已填寫過，抵用金代碼已寄至您的信箱，感謝您的回饋！</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var L = 'zh';
+var A = { email:'', branch:'', ch:'', reasons:[], overall:0, desk:0, deskName:'', clean:0, roomName:'', nps:-1, comment:'' };
+var filled = {}; // 模擬已填寫紀錄 (實際會查資料庫)
+
+var STAFF = {
+  tc:  ['張傳坤','謝芳妤','劉婕瑜','王苡臻','邱榆芳','凃奕安','張芳毓','施棨竣','何友宜','謝宜秦','蘇宣豪','周羽煥','瑞菲塔'],
+  tt1: ['沈黛君','曾柏翰','周敬倫','張瑞妤','王治為','李竹馨','李秀芳','邱曉娸','温佑恩','黃紹華','陳靳豫玟','黃思萍','王彩芸','因德拉'],
+  tt2: ['曾心璇','林映辰','李怡慧','陳芷妤','王資媛','盧永珍','林筱妍','張巧玟','郭胤辰','江俊奇','伊隆']
+};
+
+var SZH = ['','很不滿意','不太滿意','還算滿意','非常滿意','完美！'];
+var SEN = ['','Poor','Below average','Good','Very good','Excellent!'];
+var cur = 0;
+
+function $(id){ return document.getElementById(id); }
+
+function showStep(n){
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('on'); });
+  var ids = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','sdone','salready'];
+  $(n <= 9 ? ids[n] : (n === 10 ? 'sdone' : 'salready')).classList.add('on');
+  $('prog').style.width = Math.min(((n+1)/10)*100, 100) + '%';
+  cur = n;
+  window.scrollTo(0, 0);
+}
+
+function fillSelect(selId, branch){
+  var sel = $(selId);
+  var ph = L === 'zh' ? '-- 請選擇（選填）--' : '-- Skip (optional) --';
+  sel.innerHTML = '<option value="">' + ph + '</option>';
+  (STAFF[branch] || []).forEach(function(name){
+    var o = document.createElement('option');
+    o.value = name; o.textContent = name;
+    sel.appendChild(o);
+  });
+}
+
+function selR(key, val, el){
+  A[key] = val;
+  el.parentNode.querySelectorAll('.oi').forEach(function(e){ e.classList.remove('sel'); });
+  el.classList.add('sel');
+  if(key === 'branch'){
+    fillSelect('sel-desk', val);
+    fillSelect('sel-room', val);
+  }
+}
+
+function tog(el){ el.classList.toggle('sel'); }
+
+function buildStars(wrapId, key, lblId){
+  var w = $(wrapId); w.innerHTML = '';
+  for(var i = 1; i <= 5; i++){
+    (function(n){
+      var s = document.createElement('span');
+      s.className = 'star' + (A[key] >= n ? ' lit' : '');
+      s.textContent = '★';
+      s.onmouseenter = function(){ hov(wrapId, n); };
+      s.onmouseleave = function(){ ren(wrapId, A[key]); };
+      s.onclick = function(){ A[key] = n; ren(wrapId, n); updL(lblId, key); };
+      w.appendChild(s);
+    })(i);
+  }
+}
+
+function ren(id, v){
+  var ch = $(id).children;
+  for(var i = 0; i < ch.length; i++) ch[i].className = 'star' + (i < v ? ' lit' : '');
+}
+function hov(id, v){ ren(id, v); }
+function updL(id, key){
+  var arr = L === 'zh' ? SZH : SEN;
+  $(id).textContent = arr[A[key]] || '';
+}
+
+function buildNPS(){
+  var w = $('nps-row'); w.innerHTML = '';
+  for(var i = 0; i <= 10; i++){
+    (function(n){
+      var b = document.createElement('button');
+      b.className = 'nb' + (A.nps === n ? ' sel' : '');
+      b.textContent = n;
+      b.onclick = function(){
+        A.nps = n;
+        var ch = $('nps-row').children;
+        for(var j = 0; j < ch.length; j++) ch[j].classList.toggle('sel', j === n);
+      };
+      w.appendChild(b);
+    })(i);
+  }
+}
+
+async function n(step){ _n(step); }
+async function _n(step){
+  if(step === 0){
+    var em = $('imail').value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){
+      $('emerr').style.display = 'block'; return;
+    }
+    $('emerr').style.display = 'none';
+    A.email = em;
+  }
+  if(step === 1 && !A.branch){ alert(L==='zh'?'請選擇館別':'Please select a branch'); return; }
+  if(step === 2 && !A.ch){ alert(L==='zh'?'請選擇訂房管道':'Please select booking channel'); return; }
+  if(step === 4 && A.overall === 0){ alert(L==='zh'?'請選擇整體評分':'Please rate your overall experience'); return; }
+  if(step === 5 && A.desk === 0){ alert(L==='zh'?'請選擇櫃檯評分':'Please rate front desk service'); return; }
+  if(step === 7 && A.clean === 0){ alert(L==='zh'?'請選擇房間整潔評分':'Please rate room cleanliness'); return; }
+  if(step === 9 && A.nps === -1){ alert(L==='zh'?'請選擇推薦分數':'Please select a score'); return; }
+  if(step === 6) A.deskName = $('sel-desk').value;
+  if(step === 8) A.roomName = $('sel-room').value;
+  showStep(step + 1);
+}
+
+function bk(step){ if(step > 0) showStep(step - 1); }
+
+var API = 'https://norden-ruder-api-production.up.railway.app';
+
+function submit(){ _submit(); }
+async function _submit(){
+  A.comment = $('icomment').value;
+  $('b9').textContent = '送出中...';
+  $('b9').disabled = true;
+
+  try {
+    var res = await fetch(API + '/api/check-email?email=' + encodeURIComponent(A.email));
+    var check = await res.json();
+    if(check.exists){ showStep(11); return; }
+
+    var res2 = await fetch(API + '/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: A.email,
+        branch: A.branch,
+        channel: A.ch,
+        reasons: Array.from(document.querySelectorAll('#s3 .oi.sel')).map(function(el){ return el.querySelector('.otxt').textContent; }),
+        score_overall: A.overall,
+        score_desk: A.desk,
+        praise_desk: A.deskName,
+        score_clean: A.clean,
+        praise_room: A.roomName,
+        nps: A.nps,
+        comment: A.comment
+      })
+    });
+    var data = await res2.json();
+    if(data.success){
+      $('cv').textContent = data.coupon_code;
+      showStep(10);
+    } else {
+      alert('送出失敗，請再試一次');
+      $('b9').textContent = L==='zh'?'送出並領取抵用金':'Submit & Get Coupon';
+      $('b9').disabled = false;
+    }
+  } catch(e) {
+    alert('網路錯誤，請確認網路連線後再試一次');
+    $('b9').textContent = L==='zh'?'送出並領取抵用金':'Submit & Get Coupon';
+    $('b9').disabled = false;
+  }
+}
+
+function setL(l){
+  L = l;
+  $('bzh').classList.toggle('on', l === 'zh');
+  $('ben').classList.toggle('on', l === 'en');
+  applyL();
+}
+
+function applyL(){
+  var zh = L === 'zh';
+  $('hsub').textContent = zh ? '住宿回饋問卷' : 'Guest Feedback Survey';
+  var steps = [
+    [zh?'步驟 1 / 10':'Step 1 / 10', zh?'您的 Email 信箱':'Your Email Address', zh?'完成後抵用金代碼將寄送至此信箱，每個信箱限填一次':'Your coupon will be sent here. One submission per email.'],
+    [zh?'步驟 2 / 10':'Step 2 / 10', zh?'您入住的是哪個館？':'Which branch did you stay at?', zh?'請選擇一項':'Please select one'],
+    [zh?'步驟 3 / 10':'Step 3 / 10', zh?'這次從哪個管道訂房？':'How did you book your stay?', zh?'請選擇一項':'Please select one'],
+    [zh?'步驟 4 / 10':'Step 4 / 10', zh?'選擇入住路得行旅的主要原因':'Why did you choose Norden Ruder?', zh?'可複選':'Select all that apply'],
+    [zh?'步驟 5 / 10':'Step 5 / 10', zh?'整體住宿體驗':'Overall stay experience', zh?'Overall experience':'整體住宿體驗'],
+    [zh?'步驟 6 / 10':'Step 6 / 10', zh?'櫃檯服務評分':'Front desk service rating', zh?'Front desk service':'櫃檯服務'],
+    [zh?'步驟 7 / 10':'Step 7 / 10', zh?'表揚櫃檯人員':'Commend front desk staff', zh?'這次服務您的櫃檯人員是誰？（選填）':'Who served you at the front desk? (Optional)'],
+    [zh?'步驟 8 / 10':'Step 8 / 10', zh?'房間整潔評分':'Room cleanliness rating', zh?'Room cleanliness':'房間整潔'],
+    [zh?'步驟 9 / 10':'Step 9 / 10', zh?'表揚房務人員':'Commend housekeeping staff', zh?'這次打掃您房間的房務人員是誰？（選填）':'Who cleaned your room? (Optional)'],
+    [zh?'步驟 10 / 10':'Step 10 / 10', zh?'您願意推薦路得行旅給朋友嗎？':'Would you recommend Norden Ruder to a friend?', zh?'0 = 完全不願意 ／ 10 = 非常願意推薦':'0 = Not at all ／ 10 = Absolutely']
+  ];
+  for(var i = 0; i < steps.length; i++){
+    var el = $('s'+i+'l'); if(el) el.textContent = steps[i][0];
+    var eq = $('s'+i+'q'); if(eq) eq.textContent = steps[i][1];
+    var es = $('s'+i+'s'); if(es) es.textContent = steps[i][2];
+  }
+  $('btc').textContent = zh ? '台中館' : 'Taichung Branch';
+  $('btt1').textContent = zh ? '台東1館' : 'Taitung Branch 1';
+  $('btt2').textContent = zh ? '台東2館' : 'Taitung Branch 2';
+  $('chof').textContent = zh ? '官網直訂' : 'Official website';
+  $('chot').textContent = zh ? '其他' : 'Other';
+  $('r1').textContent = zh ? '朋友或旅人推薦' : 'Recommended by friends';
+  $('r2').textContent = zh ? '社群媒體或網路搜尋' : 'Social media / web search';
+  $('r3').textContent = zh ? '訂房網站評價' : 'Reviews on booking sites';
+  $('r4').textContent = zh ? '房間價格' : 'Room pricing';
+  $('r5').textContent = zh ? '空間設計與氛圍' : 'Design & atmosphere';
+  $('r6').textContent = zh ? '交通位置便利' : 'Convenient location';
+  $('r7').textContent = zh ? '曾經入住過' : 'Stayed here before';
+  $('sk1').textContent = zh ? '不確定或不想選擇，可直接點「下一步」跳過' : 'Feel free to skip if unsure';
+  $('sk2').textContent = zh ? '不確定或不想選擇，可直接點「下一步」跳過' : 'Feel free to skip if unsure';
+  $('s9q2').textContent = zh ? '給我們的話（選填）' : 'Any feedback for us? (Optional)';
+  $('s9s2').textContent = zh ? '任何建議或讓您印象深刻的事，都歡迎分享' : 'Any suggestions or memorable moments — feel free to share';
+  $('icomment').placeholder = zh ? '請自由分享您的想法...' : 'Feel free to share any thoughts...';
+  $('nl').textContent = zh ? '不願意推薦' : 'Not likely';
+  $('nr').textContent = zh ? '非常願意推薦' : 'Very likely';
+  $('dt').textContent = zh ? '感謝您的回饋！' : 'Thank you for your feedback!';
+  $('ds').textContent = zh ? '抵用金代碼已寄送至您的信箱。\n下次入住時出示給櫃檯即可折抵 NT$50。' : 'Your coupon code has been sent to your email.\nShow it at check-in for NT$50 off.';
+  $('cl').textContent = zh ? '您的專屬抵用金代碼（demo 示意）' : 'Your exclusive coupon code (demo)';
+  $('at').textContent = zh ? '您已填寫過問卷' : 'Already submitted';
+  $('as').textContent = zh ? '此 email 已填寫過，抵用金代碼已寄至您的信箱，感謝您的回饋！' : 'This email has already submitted. Your coupon was sent previously — thank you!';
+  $('emerr').textContent = zh ? '請輸入有效的 email 地址' : 'Please enter a valid email address';
+  $('b9').textContent = zh ? '送出並領取抵用金' : 'Submit & Get Coupon';
+  for(var j = 0; j <= 8; j++){
+    var btn = $('b'+j);
+    if(btn) btn.textContent = zh ? '下一步' : 'Next';
+  }
+  var ph = zh ? '-- 請選擇（選填）--' : '-- Skip (optional) --';
+  ['sel-desk','sel-room'].forEach(function(id){
+    var sel = $(id);
+    if(sel && sel.options.length > 0) sel.options[0].textContent = ph;
+  });
+  updL('ll-ov','overall'); updL('ll-dk','desk'); updL('ll-cl','clean');
+}
+
+buildStars('st-ov','overall','ll-ov');
+buildStars('st-dk','desk','ll-dk');
+buildStars('st-cl','clean','ll-cl');
+buildNPS();
+applyL();
+</script>
+</body>
+</html>
