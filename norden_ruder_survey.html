@@ -148,7 +148,7 @@
 
   <!-- Step 0: Email -->
   <div id="s0" class="step on">
-    <div class="slbl" id="s0l">步驟 1 / 10</div>
+    <div class="slbl" id="s0l">步驟 1 / 12</div>
     <div class="sq" id="s0q">您的 Email 信箱</div>
     <div class="ssub" id="s0s"></div>
     <input type="email" id="imail" placeholder="your@email.com"/>
@@ -158,7 +158,7 @@
 
   <!-- Step 1: Branch -->
   <div id="s1" class="step">
-    <div class="slbl" id="s1l">步驟 2 / 10</div>
+    <div class="slbl" id="s1l">步驟 2 / 12</div>
     <div class="sq" id="s1q">您入住的是哪個館？</div>
     <div class="ssub" id="s1s">請選擇一項</div>
     <div class="og">
@@ -169,9 +169,27 @@
     <div class="brow"><button class="bback" onclick="bk(1)">←</button><button class="bnext" onclick="n(1)" id="b1">下一步</button></div>
   </div>
 
-  <!-- Step 2: Channel -->
+  <!-- Step 2b: Check-in Date -->
+  <div id="s2b" class="step">
+    <div class="slbl" id="s2b-lbl">步驟 3 / 12</div>
+    <div class="sq" id="s2b-q">入住日期</div>
+    <div class="ssub" id="s2b-s">Check-in date</div>
+    <input type="date" id="inp-checkin" style="width:100%;padding:11px 14px;font-size:14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Noto Serif TC',Georgia,serif;"/>
+    <div class="brow"><button class="bback" onclick="bk('s2b')">←</button><button class="bnext" onclick="n('s2b')" id="b2b">下一步</button></div>
+  </div>
+
+  <!-- Step 2c: Room Number -->
+  <div id="s2c" class="step">
+    <div class="slbl" id="s2c-lbl">步驟 4 / 12</div>
+    <div class="sq" id="s2c-q">入住房號</div>
+    <div class="ssub" id="s2c-s">Room number（忘記可跳過 / Optional）</div>
+    <input type="text" id="inp-room" placeholder="例如：101" style="width:100%;padding:11px 14px;font-size:14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Noto Serif TC',Georgia,serif;"/>
+    <div class="brow"><button class="bback" onclick="bk('s2c')">←</button><button class="bnext" onclick="n('s2c')" id="b2c">下一步</button></div>
+  </div>
+
+  <!-- Step 3: Channel -->
   <div id="s2" class="step">
-    <div class="slbl" id="s2l">步驟 3 / 10</div>
+    <div class="slbl" id="s2l">步驟 3 / 12</div>
     <div class="sq" id="s2q">這次從哪個管道訂房？</div>
     <div class="ssub" id="s2s">請選擇一項</div>
     <div class="og">
@@ -186,7 +204,7 @@
 
   <!-- Step 3: Reasons -->
   <div id="s3" class="step">
-    <div class="slbl" id="s3l">步驟 4 / 10</div>
+    <div class="slbl" id="s3l">步驟 4 / 12</div>
     <div class="sq" id="s3q">選擇入住路得行旅的主要原因</div>
     <div class="ssub" id="s3s">可複選</div>
     <div class="og">
@@ -203,7 +221,7 @@
 
   <!-- Step 4: Overall stars -->
   <div id="s4" class="step">
-    <div class="slbl" id="s4l">步驟 5 / 10</div>
+    <div class="slbl" id="s4l">步驟 5 / 12</div>
     <div class="sq" id="s4q">整體住宿體驗</div>
     <div class="ssub" id="s4s">Overall experience</div>
     <div class="srow" id="st-ov"></div>
@@ -213,7 +231,7 @@
 
   <!-- Step 5: Desk stars -->
   <div id="s5" class="step">
-    <div class="slbl" id="s5l">步驟 6 / 10</div>
+    <div class="slbl" id="s5l">步驟 6 / 12</div>
     <div class="sq" id="s5q">櫃檯服務評分</div>
     <div class="ssub" id="s5s">Front desk service</div>
     <div class="srow" id="st-dk"></div>
@@ -223,7 +241,7 @@
 
   <!-- Step 6: Commend desk staff -->
   <div id="s6" class="step">
-    <div class="slbl" id="s6l">步驟 7 / 10</div>
+    <div class="slbl" id="s6l">步驟 7 / 12</div>
     <div class="sq" id="s6q">表揚櫃檯人員</div>
     <div class="ssub" id="s6s">這次服務您的櫃檯人員是誰？（選填）</div>
     <select id="sel-desk"></select>
@@ -233,7 +251,7 @@
 
   <!-- Step 7: Room cleanliness stars -->
   <div id="s7" class="step">
-    <div class="slbl" id="s7l">步驟 8 / 10</div>
+    <div class="slbl" id="s7l">步驟 8 / 12</div>
     <div class="sq" id="s7q">房間整潔評分</div>
     <div class="ssub" id="s7s">Room cleanliness</div>
     <div class="srow" id="st-cl"></div>
@@ -243,7 +261,7 @@
 
   <!-- Step 8: Commend room staff -->
   <div id="s8" class="step">
-    <div class="slbl" id="s8l">步驟 9 / 10</div>
+    <div class="slbl" id="s8l">步驟 9 / 12</div>
     <div class="sq" id="s8q">表揚房務人員</div>
     <div class="ssub" id="s8s">這次打掃您房間的房務人員是誰？（選填）</div>
     <select id="sel-room"></select>
@@ -253,7 +271,7 @@
 
   <!-- Step 9: NPS + Comment -->
   <div id="s9" class="step">
-    <div class="slbl" id="s9l">步驟 10 / 10</div>
+    <div class="slbl" id="s9l">步驟 10 / 12</div>
     <div class="sq" id="s9q">您願意推薦路得行旅給朋友嗎？</div>
     <div class="ssub" id="s9s">0 = 完全不願意 ／ 10 = 非常願意推薦</div>
     <div class="nrow" id="nps-row"></div>
@@ -286,7 +304,7 @@
 
 <script>
 var L = 'zh';
-var A = { email:'', branch:'', ch:'', reasons:[], overall:0, desk:0, deskName:'', clean:0, roomName:'', nps:-1, comment:'' };
+var A = { email:'', branch:'', ch:'', checkin:'', room:'', reasons:[], overall:0, desk:0, deskName:'', clean:0, roomName:'', nps:-1, comment:'' };
 var filled = {}; // 模擬已填寫紀錄 (實際會查資料庫)
 
 var STAFF = {
@@ -303,9 +321,14 @@ function $(id){ return document.getElementById(id); }
 
 function showStep(n){
   document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('on'); });
-  var ids = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','sdone','salready'];
-  $(n <= 9 ? ids[n] : (n === 10 ? 'sdone' : 'salready')).classList.add('on');
-  $('prog').style.width = Math.min(((n+1)/10)*100, 100) + '%';
+  if(typeof n === 'string'){
+    $(n).classList.add('on');
+  } else {
+    var ids = ['s0','s1','s2b','s2c','s2','s3','s4','s5','s6','s7','s8','s9','sdone'];
+    var el = ids[n] ? $(ids[n]) : $('sdone');
+    if(el) el.classList.add('on');
+  }
+  $('prog').style.width = Math.min(((typeof n === 'number' ? n+1 : 6)/12)*100, 100) + '%';
   cur = n;
   window.scrollTo(0, 0);
 }
@@ -459,16 +482,16 @@ function applyL(){
   var zh = L === 'zh';
   $('hsub').textContent = zh ? '住宿回饋問卷' : 'Guest Feedback Survey';
   var steps = [
-    [zh?'步驟 1 / 10':'Step 1 / 10', zh?'您的 Email 信箱':'Your Email Address', zh?'':''],
-    [zh?'步驟 2 / 10':'Step 2 / 10', zh?'您入住的是哪個館？':'Which branch did you stay at?', zh?'請選擇一項':'Please select one'],
-    [zh?'步驟 3 / 10':'Step 3 / 10', zh?'這次從哪個管道訂房？':'How did you book your stay?', zh?'請選擇一項':'Please select one'],
-    [zh?'步驟 4 / 10':'Step 4 / 10', zh?'選擇入住路得行旅的主要原因':'Why did you choose Norden Ruder?', zh?'可複選':'Select all that apply'],
-    [zh?'步驟 5 / 10':'Step 5 / 10', zh?'整體住宿體驗':'Overall stay experience', zh?'Overall experience':'整體住宿體驗'],
-    [zh?'步驟 6 / 10':'Step 6 / 10', zh?'櫃檯服務評分':'Front desk service rating', zh?'Front desk service':'櫃檯服務'],
-    [zh?'步驟 7 / 10':'Step 7 / 10', zh?'表揚櫃檯人員':'Commend front desk staff', zh?'這次服務您的櫃檯人員是誰？（選填）':'Who served you at the front desk? (Optional)'],
-    [zh?'步驟 8 / 10':'Step 8 / 10', zh?'房間整潔評分':'Room cleanliness rating', zh?'Room cleanliness':'房間整潔'],
-    [zh?'步驟 9 / 10':'Step 9 / 10', zh?'表揚房務人員':'Commend housekeeping staff', zh?'這次打掃您房間的房務人員是誰？（選填）':'Who cleaned your room? (Optional)'],
-    [zh?'步驟 10 / 10':'Step 10 / 10', zh?'您願意推薦路得行旅給朋友嗎？':'Would you recommend Norden Ruder to a friend?', zh?'0 = 完全不願意 ／ 10 = 非常願意推薦':'0 = Not at all ／ 10 = Absolutely']
+    [zh?'步驟 1 / 12':'Step 1 / 12', zh?'您的 Email 信箱':'Your Email Address', zh?'':''],
+    [zh?'步驟 2 / 12':'Step 2 / 12', zh?'您入住的是哪個館？':'Which branch did you stay at?', zh?'請選擇一項':'Please select one'],
+    [zh?'步驟 5 / 12':'Step 5 / 12', zh?'這次從哪個管道訂房？':'How did you book your stay?', zh?'請選擇一項':'Please select one'],
+    [zh?'步驟 4 / 12':'Step 4 / 12', zh?'選擇入住路得行旅的主要原因':'Why did you choose Norden Ruder?', zh?'可複選':'Select all that apply'],
+    [zh?'步驟 5 / 12':'Step 5 / 12', zh?'整體住宿體驗':'Overall stay experience', zh?'Overall experience':'整體住宿體驗'],
+    [zh?'步驟 6 / 12':'Step 6 / 12', zh?'櫃檯服務評分':'Front desk service rating', zh?'Front desk service':'櫃檯服務'],
+    [zh?'步驟 7 / 12':'Step 7 / 12', zh?'表揚櫃檯人員':'Commend front desk staff', zh?'這次服務您的櫃檯人員是誰？（選填）':'Who served you at the front desk? (Optional)'],
+    [zh?'步驟 8 / 12':'Step 8 / 12', zh?'房間整潔評分':'Room cleanliness rating', zh?'Room cleanliness':'房間整潔'],
+    [zh?'步驟 9 / 12':'Step 9 / 12', zh?'表揚房務人員':'Commend housekeeping staff', zh?'這次打掃您房間的房務人員是誰？（選填）':'Who cleaned your room? (Optional)'],
+    [zh?'步驟 10 / 12':'Step 10 / 12', zh?'您願意推薦路得行旅給朋友嗎？':'Would you recommend Norden Ruder to a friend?', zh?'0 = 完全不願意 ／ 10 = 非常願意推薦':'0 = Not at all ／ 10 = Absolutely']
   ];
   for(var i = 0; i < steps.length; i++){
     var el = $('s'+i+'l'); if(el) el.textContent = steps[i][0];
