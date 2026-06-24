@@ -242,9 +242,18 @@ var A = {email:'',branch:'',checkin:'',room:'',ch:'',overall:0,desk:0,deskName:'
 var API = 'https://norden-ruder-api-production.up.railway.app';
 
 var STAFF = {
-  taichung: ['張傳坤','劉婕瑜','王苡臻','邱榆芳','凃奕安','張芳毓','施棨竣','何友宜','謝宜秦','蘇宣豪','周羽煥','瑞菲塔'],
-  taitung1: ['沈黛君','曾柏翰','周敬倫','張瑞妤','王治為','李竹馨','李秀芳','邱曉娸','温佑恩','黃紹華','陳靳豫玟','黃思萍','王彩芸','因德拉'],
-  taitung2: ['曾心璇','林映辰','李怡慧','陳芷妤','王資媛','盧永珍','林筱妍','張巧玟','郭胤辰','江俊奇','伊隆']
+  taichung: {
+    desk: ['劉冠廷','賴繪喬','劉婕妤','王苡臻','邱榆芳','凃奕安','張芳毓'],
+    room: ['施棨俊','何友宜','謝宜秦','蘇宣豪','周羽煥','瑞菲塔','劉婕妤','邱榆芳']
+  },
+  taitung1: {
+    desk: ['沈黛君','曾柏翰','周敬倫','王治為','張瑞妤','李竹馨'],
+    room: ['李秀芳','邱曉娸','温佑恩','黃紹華','陳靳豫玟','黃思萍','王彩芸','因德拉']
+  },
+  taitung2: {
+    desk: ['曾心璇','鄒御書','林映辰','李怡慧','王資媛','郭胤辰'],
+    room: ['盧永珍','張巧玟','林筱妍','江俊奇','利冠真','伊隆','曾心璇','鄒御書','林映辰','王資媛','郭胤辰']
+  }
 };
 
 var STEPS = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','sdone'];
@@ -346,7 +355,9 @@ function fillSelect(id,branch){
   var sel=$(id);
   var ph=L==='zh'?'-- 請選擇（選填）--':'-- Skip (optional) --';
   sel.innerHTML='<option value="">'+ph+'</option>';
-  (STAFF[branch]||[]).forEach(function(name){
+  var type = id==='sel-desk' ? 'desk' : 'room';
+  var list = STAFF[branch] ? (STAFF[branch][type]||[]) : [];
+  list.forEach(function(name){
     var o=document.createElement('option');
     o.value=name;o.textContent=name;
     sel.appendChild(o);
