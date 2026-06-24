@@ -243,16 +243,16 @@ var API = 'https://norden-ruder-api-production.up.railway.app';
 
 var STAFF = {
   taichung: {
-    desk: ['劉冠廷','賴繪喬','劉婕妤','王苡臻','邱榆芳','凃奕安','張芳毓'],
-    room: ['施棨俊','何友宜','謝宜秦','蘇宣豪','周羽煥','瑞菲塔','劉婕妤','邱榆芳']
+    desk: {zh:['劉冠廷','賴繪喬','劉婕妤','王苡臻','邱榆芳','凃奕安','張芳毓'],en:['Louis','Yui','Jamie','Serena','Chrissy','Judy','Lexi']},
+    room: {zh:['施棨俊','何友宜','謝宜秦','蘇宣豪','周羽煥','瑞菲塔','劉婕妤','邱榆芳'],en:['Jin','Youyi','Yi Cin','Kyle','Ace','Refita','Jamie','Chrissy']}
   },
   taitung1: {
-    desk: ['沈黛君','曾柏翰','周敬倫','王治為','張瑞妤','李竹馨'],
-    room: ['李秀芳','邱曉娸','温佑恩','黃紹華','陳靳豫玟','黃思萍','王彩芸','因德拉']
+    desk: {zh:['沈黛君','曾柏翰','周敬倫','王治為','張瑞妤','李竹馨'],en:['Dale','Henry','Allen','Chi','Victoria','Lucy']},
+    room: {zh:['李秀芳','邱曉娸','温佑恩','黃紹華','陳靳豫玟','黃思萍','王彩芸','因德拉'],en:['Sara','Vivian','WenWen','Frank','Jin','Sara Huang','Smiling Wang','Indra']}
   },
   taitung2: {
-    desk: ['曾心璇','鄒御書','林映辰','李怡慧','王資媛','郭胤辰'],
-    room: ['盧永珍','張巧玟','林筱妍','江俊奇','利冠真','伊隆','曾心璇','鄒御書','林映辰','王資媛','郭胤辰']
+    desk: {zh:['曾心璇','鄒御書','林映辰','李怡慧','王資媛','郭胤辰'],en:['Joan','Joe','Victor','Anna','Woody','Allen']},
+    room: {zh:['盧永珍','張巧玟','林筱妍','江俊奇','利冠真','伊隆','曾心璇','鄒御書','林映辰','王資媛','郭胤辰'],en:['Robyn','Chiao','Arashi','Jerry','Guanjen','Helga','Joan','Joe','Victor','Woody','Allen']}
   }
 };
 
@@ -356,10 +356,14 @@ function fillSelect(id,branch){
   var ph=L==='zh'?'-- 請選擇（選填）--':'-- Skip (optional) --';
   sel.innerHTML='<option value="">'+ph+'</option>';
   var type = id==='sel-desk' ? 'desk' : 'room';
-  var list = STAFF[branch] ? (STAFF[branch][type]||[]) : [];
-  list.forEach(function(name){
+  var staffData = STAFF[branch] ? STAFF[branch][type] : null;
+  if(!staffData) return;
+  var zhList = staffData.zh || [];
+  var enList = staffData.en || [];
+  zhList.forEach(function(name, i){
     var o=document.createElement('option');
-    o.value=name;o.textContent=name;
+    o.value=name;
+    o.textContent=L==='zh' ? name : (enList[i]||name);
     sel.appendChild(o);
   });
 }
@@ -403,6 +407,7 @@ function setL(l){
   L=l;
   document.querySelectorAll('.lb').forEach(function(b){b.classList.remove('on');});
   event.target.classList.add('on');
+  if(A.branch){ fillSelect('sel-desk',A.branch); fillSelect('sel-room',A.branch); }
   applyL();
 }
 
