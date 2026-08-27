@@ -354,13 +354,14 @@ function doSubmit(){
   fetch(API+'/api/submit',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
+       body:JSON.stringify({
       email:A.email,branch:A.branch,channel:A.ch,reasons:reasons,
       score_overall:A.overall,score_desk:A.desk,praise_desk:A.deskName,
       score_clean:A.clean,praise_room:A.roomName,nps:A.nps,comment:A.comment,
-      checkin_date:A.checkin||null,room_number:A.room||null,coupon_code:'N/A'
+      checkin_date:A.checkin||null,room_number:A.room||null,
+      feedback_positive:A.feedback_positive||null,
+      feedback_improve:A.feedback_improve||null
     })
-  }).catch(function(e){console.error(e);});
 }
 
 function selR(key,val,el){
