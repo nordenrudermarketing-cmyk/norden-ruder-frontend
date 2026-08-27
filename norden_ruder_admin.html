@@ -13,8 +13,6 @@
   --brand:#70705c;--brand-light:#e0ddd0;--brand-dark:#4a4a3a;
   --gray:#9a9a80;--border:#d0cdc0;--bg:#e8e5d5;--card:#f2f0e6;
   --text:#70705c;--text2:#4a4a3a;
-  --success:#6a8a6a;--success-light:#eef2ee;
-  --danger:#a05050;--danger-light:#f5eeee;
 }
 body{font-family:'Noto Serif TC',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;}
 .layout{display:flex;min-height:100vh;}
@@ -46,7 +44,7 @@ body{font-family:'Noto Serif TC',Georgia,serif;background:var(--bg);color:var(--
 .table-card{background:var(--card);border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.25rem;}
 .table-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);}
 .table-title{font-size:14px;font-weight:600;color:var(--text2);}
-.search-input{padding:7px 12px;font-size:13px;border:1px solid var(--border);border-radius:8px;font-family:'Noto Serif TC',Georgia,serif;color:var(--text);width:100%;margin:0.75rem 1rem 0;width:calc(100% - 2rem);background:var(--bg);}
+.search-input{padding:7px 12px;font-size:13px;border:1px solid var(--border);border-radius:8px;font-family:'Noto Serif TC',Georgia,serif;color:var(--text);width:calc(100% - 2rem);margin:0.75rem 1rem 0;background:var(--bg);}
 .search-input:focus{outline:none;border-color:var(--brand);}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 thead th{padding:10px 1rem;text-align:left;font-size:11px;font-weight:600;color:var(--gray);border-bottom:1px solid var(--border);white-space:nowrap;letter-spacing:0.5px;}
@@ -69,7 +67,6 @@ td{padding:10px 1rem;color:var(--text2);vertical-align:middle;}
 .empty{text-align:center;padding:3rem 1rem;color:var(--gray);}
 .empty-icon{font-size:40px;margin-bottom:0.75rem;}
 .empty-text{font-size:14px;}
-.filter-row{display:flex;gap:8px;margin-top:0.75rem;}
 .filter-btn{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--gray);cursor:pointer;font-family:'Noto Serif TC',Georgia,serif;}
 .filter-btn.on{background:var(--brand-light);color:var(--brand);border-color:var(--brand);}
 .praise-type-row{display:flex;gap:8px;margin-bottom:1.25rem;}
@@ -86,15 +83,9 @@ td{padding:10px 1rem;color:var(--text2);vertical-align:middle;}
       <div class="sidebar-logo-sub">問卷後台管理</div>
     </div>
     <nav class="nav">
-      <div class="nav-item active" onclick="goPage('records',this)">
-        <span class="nav-icon">📋</span> 填寫紀錄
-      </div>
-      <div class="nav-item" onclick="goPage('praise',this)">
-        <span class="nav-icon">⭐</span> 人員表揚
-      </div>
-      <div class="nav-item" onclick="goPage('stats',this)">
-        <span class="nav-icon">📊</span> 統計分析
-      </div>
+      <div class="nav-item active" onclick="goPage('records',this)"><span class="nav-icon">📋</span> 填寫紀錄</div>
+      <div class="nav-item" onclick="goPage('praise',this)"><span class="nav-icon">⭐</span> 人員表揚</div>
+      <div class="nav-item" onclick="goPage('stats',this)"><span class="nav-icon">📊</span> 統計分析</div>
     </nav>
     <div class="sidebar-branch">
       <div class="branch-label">查看館別</div>
@@ -106,57 +97,29 @@ td{padding:10px 1rem;color:var(--text2);vertical-align:middle;}
       </select>
     </div>
   </div>
-
   <div class="main">
     <div class="topbar">
       <div class="topbar-title" id="page-title">填寫紀錄</div>
       <div class="topbar-time" id="top-time"></div>
     </div>
     <div class="content">
-
       <!-- 填寫紀錄 -->
       <div class="page active" id="page-records">
         <div class="stats">
-          <div class="stat-card">
-            <div class="stat-label">總填寫數</div>
-            <div class="stat-val" id="stat-total">0</div>
-            <div class="stat-sub">累計問卷</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">平均整體評分</div>
-            <div class="stat-val" id="stat-avg">—</div>
-            <div class="stat-sub">滿分 5 分</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">平均 NPS</div>
-            <div class="stat-val" id="stat-nps">—</div>
-            <div class="stat-sub">滿分 10 分</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">本月問卷數</div>
-            <div class="stat-val" id="stat-month">0</div>
-            <div class="stat-sub">當月累計</div>
-          </div>
+          <div class="stat-card"><div class="stat-label">總填寫數</div><div class="stat-val" id="stat-total">0</div><div class="stat-sub">累計問卷</div></div>
+          <div class="stat-card"><div class="stat-label">平均整體評分</div><div class="stat-val" id="stat-avg">—</div><div class="stat-sub">滿分 5 分</div></div>
+          <div class="stat-card"><div class="stat-label">平均 NPS</div><div class="stat-val" id="stat-nps">—</div><div class="stat-sub">滿分 10 分</div></div>
+          <div class="stat-card"><div class="stat-label">本月問卷數</div><div class="stat-val" id="stat-month">0</div><div class="stat-sub">當月累計</div></div>
         </div>
-
         <div class="table-card">
-          <div class="table-header">
-            <div class="table-title">所有填寫紀錄</div>
-          </div>
-          <input class="search-input" id="search-input" placeholder="搜尋 email..." oninput="renderTable()"/>
+          <div class="table-header"><div class="table-title">所有填寫紀錄</div></div>
+          <input class="search-input" id="search-input" placeholder="搜尋 email..." oninput="renderRecords()"/>
           <table>
-            <thead>
-              <tr>
-                <th>Email</th><th>館別</th><th>訂房管道</th><th>整體</th><th>櫃檯</th><th>房務</th><th>NPS</th><th>填寫時間</th>
-              </tr>
-            </thead>
-            <tbody id="records-tbody">
-              <tr><td colspan="8"><div class="empty"><div class="empty-icon">📋</div><div class="empty-text">載入中...</div></div></td></tr>
-            </tbody>
+            <thead><tr><th>Email</th><th>館別</th><th>訂房管道</th><th>整體</th><th>櫃檯</th><th>房務</th><th>NPS</th><th>填寫時間</th></tr></thead>
+            <tbody id="records-tbody"><tr><td colspan="8"><div class="empty"><div class="empty-icon">📋</div><div class="empty-text">載入中...</div></div></td></tr></tbody>
           </table>
         </div>
       </div>
-
       <!-- 人員表揚 -->
       <div class="page" id="page-praise">
         <div class="praise-type-row">
@@ -167,30 +130,13 @@ td{padding:10px 1rem;color:var(--text2);vertical-align:middle;}
           <div style="grid-column:span 2"><div class="empty"><div class="empty-icon">⭐</div><div class="empty-text">載入中...</div></div></div>
         </div>
       </div>
-
       <!-- 統計分析 -->
       <div class="page" id="page-stats">
         <div class="stats">
-          <div class="stat-card">
-            <div class="stat-label">平均整體評分</div>
-            <div class="stat-val" id="avg-overall">—</div>
-            <div class="stat-sub">/ 5 分</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">平均 NPS</div>
-            <div class="stat-val" id="avg-nps">—</div>
-            <div class="stat-sub">/ 10 分</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">平均櫃檯評分</div>
-            <div class="stat-val" id="avg-desk">—</div>
-            <div class="stat-sub">/ 5 分</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">平均房務評分</div>
-            <div class="stat-val" id="avg-clean">—</div>
-            <div class="stat-sub">/ 5 分</div>
-          </div>
+          <div class="stat-card"><div class="stat-label">平均整體評分</div><div class="stat-val" id="avg-overall">—</div><div class="stat-sub">/ 5 分</div></div>
+          <div class="stat-card"><div class="stat-label">平均 NPS</div><div class="stat-val" id="avg-nps">—</div><div class="stat-sub">/ 10 分</div></div>
+          <div class="stat-card"><div class="stat-label">平均櫃檯評分</div><div class="stat-val" id="avg-desk">—</div><div class="stat-sub">/ 5 分</div></div>
+          <div class="stat-card"><div class="stat-label">平均房務評分</div><div class="stat-val" id="avg-clean">—</div><div class="stat-sub">/ 5 分</div></div>
         </div>
         <div class="table-card" style="margin-bottom:1.25rem;">
           <div class="table-header"><div class="table-title">訂房管道分佈</div></div>
@@ -201,16 +147,14 @@ td{padding:10px 1rem;color:var(--text2);vertical-align:middle;}
           <div id="comments-list" style="padding:0.75rem 1rem;"></div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
-
 <script>
 var API_URL = 'https://norden-ruder-api-production.up.railway.app';
 var ADMIN_KEY = 'NR-admin-2026';
 var BRANCH_NAME = {taichung:'台中館',taitung1:'台東1館',taitung2:'台東2館',tc:'台中館',tt1:'台東1館',tt2:'台東2館'};
-var CHANNEL_NAME = {official:'官網/電話',agoda:'Agoda',booking:'Booking.com',expedia:'Trip.com',other:'其他'};
+var CHANNEL_NAME = {official:'官網/電話',agoda:'Agoda',booking:'Booking.com',trip:'Trip.com',other:'其他'};
 var ALL_DATA = [];
 var praiseType = 'desk';
 var branchFilter = 'all';
@@ -222,7 +166,6 @@ async function loadData(){
     var res = await fetch(API_URL+'/api/submissions?branch=all', {headers:authHeaders()});
     var json = await res.json();
     var raw = json.data || [];
-    // 前端自己篩選，避免 taichung/tc 不一致的問題
     if(branchFilter === 'all'){
       ALL_DATA = raw;
     } else {
@@ -257,8 +200,6 @@ function renderRecords(){
   var data = ALL_DATA.filter(function(r){
     return !search || r.email.toLowerCase().indexOf(search) >= 0;
   });
-
-  // Stats
   document.getElementById('stat-total').textContent = ALL_DATA.length;
   var avgOv = ALL_DATA.length ? (ALL_DATA.reduce(function(s,r){return s+(r.score_overall||0);},0)/ALL_DATA.length).toFixed(1) : '—';
   document.getElementById('stat-avg').textContent = avgOv;
@@ -267,22 +208,20 @@ function renderRecords(){
   var now = new Date(); var month = now.getMonth(); var year = now.getFullYear();
   var monthCount = ALL_DATA.filter(function(r){ var d=new Date(r.created_at); return d.getMonth()===month&&d.getFullYear()===year; }).length;
   document.getElementById('stat-month').textContent = monthCount;
-
   var tb = document.getElementById('records-tbody');
   if(!data.length){
     tb.innerHTML='<tr><td colspan="8"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">沒有符合的紀錄</div></div></td></tr>';
     return;
   }
   tb.innerHTML = data.map(function(r){
-    var ov = r.score_overall||0;
-    var stars = '<span class="star-small">'+'★'.repeat(ov)+'<span style="color:#d0cdc0;">'+'★'.repeat(5-ov)+'</span></span>';
-    var dk = r.score_desk||0;
-    var dkStars = '<span class="star-small">'+'★'.repeat(dk)+'<span style="color:#d0cdc0;">'+'★'.repeat(5-dk)+'</span></span>';
-    var cl = r.score_clean||0;
-    var clStars = '<span class="star-small">'+'★'.repeat(cl)+'<span style="color:#d0cdc0;">'+'★'.repeat(5-cl)+'</span></span>';
-    var branchKey = r.branch;
-    var date = new Date(r.created_at).toLocaleDateString('zh-TW');
-    return '<tr><td style="font-size:12px;">'+r.email+'</td><td><span class="badge '+branchKey+'">'+(BRANCH_NAME[branchKey]||branchKey)+'</span></td><td>'+(CHANNEL_NAME[r.channel]||r.channel||'')+'</td><td>'+stars+'</td><td>'+dkStars+'</td><td>'+clStars+'</td><td>'+(r.nps||'')+'</td><td style="font-size:12px;">'+date+'</td></tr>';
+    var ov=r.score_overall||0;
+    var stars='<span class="star-small">'+'★'.repeat(ov)+'<span style="color:#d0cdc0;">'+'★'.repeat(5-ov)+'</span></span>';
+    var dk=r.score_desk||0;
+    var dkStars='<span class="star-small">'+'★'.repeat(dk)+'<span style="color:#d0cdc0;">'+'★'.repeat(5-dk)+'</span></span>';
+    var cl=r.score_clean||0;
+    var clStars='<span class="star-small">'+'★'.repeat(cl)+'<span style="color:#d0cdc0;">'+'★'.repeat(5-cl)+'</span></span>';
+    var date=new Date(r.created_at).toLocaleDateString('zh-TW');
+    return '<tr><td style="font-size:12px;">'+r.email+'</td><td><span class="badge '+r.branch+'">'+(BRANCH_NAME[r.branch]||r.branch)+'</span></td><td>'+(CHANNEL_NAME[r.channel]||r.channel||'')+'</td><td>'+stars+'</td><td>'+dkStars+'</td><td>'+clStars+'</td><td>'+(r.nps||'')+'</td><td style="font-size:12px;">'+date+'</td></tr>';
   }).join('');
 }
 
@@ -307,9 +246,9 @@ function renderPraise(){
     return;
   }
   grid.innerHTML = sorted.map(function(name,i){
-    var cnt = counts[name];
-    var pct = Math.round((cnt/max)*100);
-    var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    var cnt=counts[name];
+    var pct=Math.round((cnt/max)*100);
+    var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
     return '<div class="praise-card"><div class="praise-name">'+medal+' '+name+'</div><div class="praise-count">'+cnt+'</div><div class="praise-label">次被表揚</div><div class="praise-bar"><div class="praise-fill" style="width:'+pct+'%"></div></div></div>';
   }).join('');
 }
@@ -327,31 +266,29 @@ function renderStats(){
   document.getElementById('avg-nps').textContent = avg(data.map(function(r){return r.nps||0;}));
   document.getElementById('avg-desk').textContent = avg(data.map(function(r){return r.score_desk||0;}));
   document.getElementById('avg-clean').textContent = avg(data.map(function(r){return r.score_clean||0;}));
-
   var chCount = {};
   data.forEach(function(r){ chCount[r.channel]=(chCount[r.channel]||0)+1; });
   var total = data.length;
   document.getElementById('channel-chart').innerHTML = Object.keys(chCount).sort(function(a,b){return chCount[b]-chCount[a];}).map(function(ch){
-    var pct = Math.round((chCount[ch]/total)*100);
+    var pct=Math.round((chCount[ch]/total)*100);
     return '<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>'+(CHANNEL_NAME[ch]||ch)+'</span><span style="color:var(--gray);">'+chCount[ch]+' 筆（'+pct+'%）</span></div><div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;background:var(--brand);border-radius:3px;width:'+pct+'%;"></div></div></div>';
   }).join('');
-
   var comments = data.filter(function(r){return r.comment||r.feedback_positive||r.feedback_improve;});
   document.getElementById('comments-list').innerHTML = comments.length ? comments.map(function(r){
-    var html = '<div class="comment-item"><div class="comment-meta">'+(BRANCH_NAME[r.branch]||r.branch)+' · '+new Date(r.created_at).toLocaleDateString('zh-TW')+'</div>';
-    if(r.feedback_positive) html += '<div style="font-size:12px;color:var(--gray);margin-bottom:2px;">✨ 滿意之處</div><div class="comment-text">'+r.feedback_positive+'</div>';
-    if(r.feedback_improve) html += '<div style="font-size:12px;color:var(--gray);margin:8px 0 2px;">🙏 改善建議</div><div class="comment-text">'+r.feedback_improve+'</div>';
-    if(r.comment) html += '<div style="font-size:12px;color:var(--gray);margin:8px 0 2px;">💬 其他留言</div><div class="comment-text">'+r.comment+'</div>';
-    html += '</div>';
+    var html='<div class="comment-item"><div class="comment-meta">'+(BRANCH_NAME[r.branch]||r.branch)+' · '+new Date(r.created_at).toLocaleDateString('zh-TW')+'</div>';
+    if(r.feedback_positive) html+='<div style="font-size:12px;color:var(--gray);margin-bottom:2px;">✨ 滿意之處</div><div class="comment-text">'+r.feedback_positive+'</div>';
+    if(r.feedback_improve) html+='<div style="font-size:12px;color:var(--gray);margin:8px 0 2px;">🙏 改善建議</div><div class="comment-text">'+r.feedback_improve+'</div>';
+    if(r.comment) html+='<div style="font-size:12px;color:var(--gray);margin:8px 0 2px;">💬 其他留言</div><div class="comment-text">'+r.comment+'</div>';
+    html+='</div>';
     return html;
   }).join('') : '<div class="empty"><div class="empty-icon">💬</div><div class="empty-text">尚無顧客留言</div></div>';
+}
 
 function tick(){
   var now=new Date();
   document.getElementById('top-time').textContent=now.getFullYear()+'/'+(now.getMonth()+1).toString().padStart(2,'0')+'/'+now.getDate().toString().padStart(2,'0')+' '+now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
 }
 tick(); setInterval(tick,1000);
-
 loadData().then(function(){ renderAll(); });
 </script>
 </body>
