@@ -335,6 +335,14 @@ function goNext(from){
     A.roomName = $('sel-room').value;
     goTo('s11'); return;
   }
+    if(from === 's11'){
+    A.comment = $('inp-comment').value;
+    goTo('s12'); return;
+  }
+  if(from === 's12'){
+    A.feedback_positive = $('inp-positive').value;
+    goTo('s13'); return;
+  }
 }
 
 function doSubmit(){
