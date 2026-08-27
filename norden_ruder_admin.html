@@ -336,11 +336,15 @@ function renderStats(){
     return '<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>'+(CHANNEL_NAME[ch]||ch)+'</span><span style="color:var(--gray);">'+chCount[ch]+' 筆（'+pct+'%）</span></div><div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;background:var(--brand);border-radius:3px;width:'+pct+'%;"></div></div></div>';
   }).join('');
 
-  var comments = data.filter(function(r){return r.comment;});
+  var comments = data.filter(function(r){return r.comment||r.feedback_positive||r.feedback_improve;});
   document.getElementById('comments-list').innerHTML = comments.length ? comments.map(function(r){
-    return '<div class="comment-item"><div class="comment-meta">'+(BRANCH_NAME[r.branch]||r.branch)+' · '+new Date(r.created_at).toLocaleDateString('zh-TW')+'</div><div class="comment-text">'+r.comment+'</div></div>';
+    var html = '<div class="comment-item"><div class="comment-meta">'+(BRANCH_NAME[r.branch]||r.branch)+' · '+new Date(r.created_at).toLocaleDateString('zh-TW')+'</div>';
+    if(r.feedback_positive) html += '<div style="font-size:12px;color:var(--gray);margin-bottom:2px;">✨ 滿意之處</div><div class="comment-text">'+r.feedback_positive+'</div>';
+    if(r.feedback_improve) html += '<div style="font-size:12px;color:var(--gray);margin:8px 0 2px;">🙏 改善建議</div><div class="comment-text">'+r.feedback_improve+'</div>';
+    if(r.comment) html += '<div style="font-size:12px;color:var(--gray);margin:8px 0 2px;">💬 其他留言</div><div class="comment-text">'+r.comment+'</div>';
+    html += '</div>';
+    return html;
   }).join('') : '<div class="empty"><div class="empty-icon">💬</div><div class="empty-text">尚無顧客留言</div></div>';
-}
 
 function tick(){
   var now=new Date();
