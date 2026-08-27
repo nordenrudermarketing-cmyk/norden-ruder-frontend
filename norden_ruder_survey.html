@@ -339,7 +339,7 @@ function goNext(from){
 
 function doSubmit(){
   if(A.nps===-1){ alert(L==='zh'?'請選擇推薦分數':'Please select a score'); return; }
-  A.comment = $('inp-comment').value;
+   A.feedback_improve = $('inp-improve').value;
   goTo('sdone');
   // 背景送出
   var reasons = Array.from(document.querySelectorAll('#s5 .oi.sel .otxt')).map(function(e){return e.textContent;});
