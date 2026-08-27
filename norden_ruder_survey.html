@@ -213,8 +213,27 @@ textarea{resize:vertical;min-height:90px;}
   </div>
 
   <!-- S11: NPS + Comment -->
+  <!-- S12: 正面回饋 -->
+  <div id="s12" class="step">
+    <div class="slbl" id="s12-lbl">步驟 12 / 14</div>
+    <div class="sq" id="s12-q">這次入住，有哪些地方讓您感到滿意或印象深刻？</div>
+    <div class="ssub" id="s12-s">您的鼓勵是我們持續前進的動力 ✨（選填）</div>
+    <textarea id="inp-positive" placeholder="請自由分享您的感受..."></textarea>
+    <div class="brow"><button class="bback" onclick="goTo('s10')">←</button><button class="bnext" onclick="goNext('s12')">下一步</button></div>
+  </div>
+
+  <!-- S13: 改善建議 -->
+  <div id="s13" class="step">
+    <div class="slbl" id="s13-lbl">步驟 13 / 14</div>
+    <div class="sq" id="s13-q">有什麼地方我們還可以做得更好？</div>
+    <div class="ssub" id="s13-s">歡迎您給我們指教，每一則意見我們都會認真看待 🙏（選填）</div>
+    <textarea id="inp-improve" placeholder="請自由分享您的建議..."></textarea>
+    <div class="brow"><button class="bback" onclick="goTo('s12')">←</button><button class="bnext" onclick="goNext('s13')">下一步</button></div>
+  </div>
+
+  <!-- S11: NPS + Comment -->
   <div id="s11" class="step">
-    <div class="slbl" id="s11-lbl">步驟 12 / 14</div>
+    <div class="slbl" id="s11-lbl">步驟 14 / 14</div>
     <div class="sq" id="s11-q">您願意推薦路得行旅給朋友嗎？</div>
     <div class="ssub" id="s11-s">0 = 完全不願意 ／ 10 = 非常願意推薦</div>
     <div class="nrow" id="nps-row"></div>
@@ -223,25 +242,7 @@ textarea{resize:vertical;min-height:90px;}
     <div class="sq" style="font-size:15px;margin-bottom:0.3rem;" id="s11-q2">給我們的話（選填）</div>
     <div class="ssub" id="s11-s2">任何建議都歡迎分享</div>
     <textarea id="inp-comment" placeholder="請自由分享您的想法..."></textarea>
-    <div class="brow"><button class="bback" onclick="goTo('s10')">←</button><button class="bnext" onclick="goNext('s11')">下一步</button></div>
-  </div>
-
-  <!-- S12: 正面回饋 -->
-  <div id="s12" class="step">
-    <div class="slbl" id="s12-lbl">步驟 13 / 14</div>
-    <div class="sq" id="s12-q">這次入住，有哪些地方讓您感到滿意或印象深刻？</div>
-    <div class="ssub" id="s12-s">您的鼓勵是我們持續前進的動力 ✨（選填）</div>
-    <textarea id="inp-positive" placeholder="請自由分享您的感受..."></textarea>
-    <div class="brow"><button class="bback" onclick="goTo('s11')">←</button><button class="bnext" onclick="goNext('s12')">下一步</button></div>
-  </div>
-
-  <!-- S13: 改善建議 -->
-  <div id="s13" class="step">
-    <div class="slbl" id="s13-lbl">步驟 14 / 14</div>
-    <div class="sq" id="s13-q">有什麼地方我們還可以做得更好？</div>
-    <div class="ssub" id="s13-s">歡迎您給我們指教，每一則意見我們都會認真看待 🙏（選填）</div>
-    <textarea id="inp-improve" placeholder="請自由分享您的建議..."></textarea>
-    <div class="brow"><button class="bback" onclick="goTo('s12')">←</button><button class="bnext" onclick="doSubmit()">送出問卷</button></div>
+    <div class="brow"><button class="bback" onclick="goTo('s13')">←</button><button class="bnext" onclick="doSubmit()">送出問卷</button></div>
   </div>
 
   <!-- Done -->
@@ -274,7 +275,7 @@ var STAFF = {
   }
 };
 
-var STEPS = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','sdone'];
+var STEPS = ["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s12","s13","s11","sdone"];
 var SZH = ['','很不滿意','不太滿意','還算滿意','非常滿意','完美！'];
 var SEN = ['','Poor','Below average','Good','Very good','Excellent!'];
 
@@ -324,14 +325,14 @@ function goNext(from){
     if(A.clean===0){ alert(L==='zh'?'請選擇房間整潔評分':'Please rate'); return; }
     goTo('s10'); return;
   }
-  if(from === 's10'){ A.roomName = $('sel-room').value; goTo('s11'); return; }
-  if(from === 's11'){ A.comment = $('inp-comment').value; goTo('s12'); return; }
+  if(from === 's10'){ A.roomName = $('sel-room').value; goTo('s12'); return; }
   if(from === 's12'){ A.feedback_positive = $('inp-positive').value; goTo('s13'); return; }
+  if(from === 's13'){ A.feedback_improve = $('inp-improve').value; goTo('s11'); return; }
 }
 
 function doSubmit(){
   if(A.nps===-1){ alert(L==='zh'?'請選擇推薦分數':'Please select a score'); return; }
-  A.feedback_improve = $('inp-improve').value;
+  A.comment = $('inp-comment').value;
   goTo('sdone');
   var reasons = Array.from(document.querySelectorAll('#s5 .oi.sel .otxt')).map(function(e){return e.textContent;});
   fetch(API+'/api/submit',{
@@ -463,7 +464,9 @@ function applyL(){
   $('s10-q').textContent=zh?'表揚房務人員':'Commend housekeeping staff';
   $('s10-s').textContent=zh?'這次打掃您房間的房務人員是誰？（選填）':'Who cleaned your room? (Optional)';
   $('sk2').textContent=zh?'不確定可直接點「下一步」跳過':'Feel free to skip';
-  $('s11-lbl').textContent=zh?'步驟 12 / 14':'Step 12 / 14';
+  $('s12-lbl').textContent=zh?'步驟 12 / 14':'Step 12 / 14';
+  $('s13-lbl').textContent=zh?'步驟 13 / 14':'Step 13 / 14';
+  $('s11-lbl').textContent=zh?'步驟 14 / 14':'Step 14 / 14';
   $('s11-q').textContent=zh?'您願意推薦路得行旅給朋友嗎？':'Would you recommend Norden Ruder?';
   $('s11-s').textContent=zh?'0 = 完全不願意 ／ 10 = 非常願意推薦':'0 = Not at all / 10 = Absolutely';
   $('s11-q2').textContent=zh?'給我們的話（選填）':'Any feedback? (Optional)';
